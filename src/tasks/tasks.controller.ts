@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { Task } from "./task.model";
 import { TasksService } from "./tasks.service";
+import { CreateTaskDto } from "./dto/create-task.dto";
 
 @Controller("tasks")
 export class TasksController {
@@ -12,6 +13,12 @@ export class TasksController {
   }
 
   @Post()
+  createTask(@Body() createDto: CreateTaskDto): Task {
+    return this.tasksService.createTask(createDto);
+  }
+
+  /* Too specific:
+  @Post()
   createTask(
     @Body("title") title: string,
     @Body("description") description: string,
@@ -19,7 +26,7 @@ export class TasksController {
     return this.tasksService.createTask(title, description);
   }
 
-  /* Chunky Version
+  // Chunky:
   @Post()
   createTask(@Body() body): void {
     console.log("body: ", body);
