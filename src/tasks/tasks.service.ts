@@ -12,38 +12,6 @@ export class TasksService {
     return this.tasks;
   }
 
-  getTaskById(id: string): Task {
-    const found = this.tasks.find((task) => task.id === id);
-    if (!found) {
-      throw new NotFoundException(`Couldn't find task with ID "${id}"`); // Nest automatically turns this into 404 error. Can also do NotFoundException()
-    }
-    return found;
-  }
-
-  createTask(createDto: CreateTaskDto): Task {
-    const { title, description } = createDto;
-
-    const task: Task = {
-      id: uuid(),
-      title,
-      description,
-      status: TaskStatus.OPEN,
-    };
-    this.tasks.push(task);
-    return task;
-  }
-
-  deleteTask(id: string): void {
-    const found = this.getTaskById(id); // For validation, so getTaskById can throw error if task not found
-    this.tasks = this.tasks.filter((task) => task.id !== id);
-  }
-
-  updateTaskStatus(id: string, status: TaskStatus): Task {
-    const task = this.getTaskById(id);
-    task.status = status;
-    return task;
-  }
-
   getTasksWithFilters(filterDto: GetTasksFilterDto): Task[] {
     const { status, search } = filterDto;
 
@@ -68,5 +36,37 @@ export class TasksService {
     //     task.description === search ||
     //     task.status === status,
     // );
+  }
+
+  getTaskById(id: string): Task {
+    const found = this.tasks.find((task) => task.id === id);
+    if (!found) {
+      throw new NotFoundException(`Couldn't find task with ID "${id}"`); // Validation: Nest automatically turns this into 404 error. Can also do NotFoundException()
+    }
+    return found;
+  }
+
+  createTask(createDto: CreateTaskDto): Task {
+    const { title, description } = createDto;
+
+    const task: Task = {
+      id: uuid(),
+      title,
+      description,
+      status: TaskStatus.OPEN,
+    };
+    this.tasks.push(task);
+    return task;
+  }
+
+  deleteTask(id: string): void {
+    const found = this.getTaskById(id); // Validation, so getTaskById can throw error if task not found
+    this.tasks = this.tasks.filter((task) => task.id !== id);
+  }
+
+  updateTaskStatus(id: string, status: TaskStatus): Task {
+    const task = this.getTaskById(id);
+    task.status = status;
+    return task;
   }
 }
