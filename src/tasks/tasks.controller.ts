@@ -1,14 +1,14 @@
 import {
   // Body,
   Controller,
+  Get,
   // Delete,
-  // Get,
-  // Param,
+  Param,
   // Patch,
   // Post,
   // Query,
 } from "@nestjs/common";
-// import { Task } from "./task.model";
+import { Task } from "./task.entity";
 import { TasksService } from "./tasks.service";
 // import { CreateTaskDto } from "./dto/create-task.dto";
 // import { GetTasksFilterDto } from "./dto/get-tasks-filter.dto";
@@ -27,11 +27,11 @@ export class TasksController {
   // }
 
   // // for "/tasks/:id/"
-  // @Get("/:id")
-  // getTaskById(@Param("id") id: string): Task {
-  //   // Validation in Service
-  //   return this.tasksService.getTaskById(id);
-  // }
+  @Get("/:id")
+  getTaskById(@Param("id") id: string): Promise<Task> {
+    // Validation in Service
+    return this.tasksService.getTaskById(id);
+  }
 
   // @Post()
   // createTask(@Body() createDto: CreateTaskDto): Task {

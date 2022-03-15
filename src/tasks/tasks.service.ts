@@ -1,13 +1,17 @@
-import {
-  Injectable,
-  // NotFoundException
-} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Task } from "./task.entity";
+import { TasksRepository } from "./tasks.repository";
 // import { CreateTaskDto } from "./dto/create-task.dto";
 // import { GetTasksFilterDto } from "./dto/get-tasks-filter.dto";
 // import { Task, TaskStatus } from "./task.model";
 
 @Injectable()
 export class TasksService {
+  constructor(
+    @InjectRepository(TasksRepository)
+    private tasksRepository: TasksRepository,
+  ) {}
   // DELETE-->// private tasks: Task[] = [];
   // getAllTasks(): Task[] {
   //   return this.tasks;
@@ -34,13 +38,15 @@ export class TasksService {
   //   //     task.status === status,
   //   // );
   // }
-  // getTaskById(id: string): Task {
-  //   const found = this.tasks.find((task) => task.id === id);
-  //   if (!found) {
-  //     throw new NotFoundException(`Couldn't find task with ID "${id}"`); // Validation: Nest automatically turns this into 404 error. Can also do NotFoundException()
-  //   }
-  //   return found;
-  // }
+
+  async getTaskById(id: string): Promise<Task> {
+    const found = await this.tasksRepository.findOne(id);
+    if (!found) {
+      throw new NotFoundException(`Couldn't find task with ID "${id}"`); // Validation: Nest automatically turns this into 404 error. Can also do NotFoundException()
+    }
+    return found;
+  }
+
   // createTask(createDto: CreateTaskDto): Task {
   //   const { title, description } = createDto;
   //   const task: Task = {
