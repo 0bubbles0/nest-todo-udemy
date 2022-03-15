@@ -1,16 +1,16 @@
 import {
-  // Body,
+  Body,
   Controller,
   Get,
   // Delete,
   Param,
   // Patch,
-  // Post,
+  Post,
   // Query,
 } from "@nestjs/common";
 import { Task } from "./task.entity";
 import { TasksService } from "./tasks.service";
-// import { CreateTaskDto } from "./dto/create-task.dto";
+import { CreateTaskDto } from "./dto/create-task.dto";
 // import { GetTasksFilterDto } from "./dto/get-tasks-filter.dto";
 // import { UpdateTaskStatusDto } from "./dto/update-task-status.dto";
 
@@ -33,11 +33,11 @@ export class TasksController {
     return this.tasksService.getTaskById(id);
   }
 
-  // @Post()
-  // createTask(@Body() createDto: CreateTaskDto): Task {
-  //   // Validation in DTO
-  //   return this.tasksService.createTask(createDto);
-  // }
+  @Post()
+  createTask(@Body() createDto: CreateTaskDto): Promise<Task> {
+    // Validation in DTO
+    return this.tasksService.createTask(createDto);
+  }
 
   // /* Too specific:
   // @Post()
