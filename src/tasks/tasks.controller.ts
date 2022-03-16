@@ -14,6 +14,7 @@ import { CreateTaskDto } from "./dto/create-task.dto";
 import { GetTasksFilterDto } from "./dto/get-tasks-filter.dto";
 import { UpdateTaskStatusDto } from "./dto/update-task-status.dto";
 
+// On route "http://.../tasks/"
 @Controller("tasks")
 export class TasksController {
   constructor(private tasksService: TasksService) {}
@@ -23,7 +24,7 @@ export class TasksController {
     return this.tasksService.getTasks(filterDto);
   }
 
-  // // for "/tasks/:id/"
+  // On route "http://.../tasks/:id/"
   @Get("/:id")
   getTaskById(@Param("id") id: string): Promise<Task> {
     // Validation in Service
