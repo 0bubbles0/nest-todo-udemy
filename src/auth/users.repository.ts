@@ -1,6 +1,7 @@
 import {
   ConflictException,
   InternalServerErrorException,
+  NotFoundException,
 } from "@nestjs/common";
 import { EntityRepository, Repository } from "typeorm";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
@@ -32,4 +33,25 @@ export class UsersRepository extends Repository<User> {
       // Better error handling: define error enum, handle in service
     }
   }
+
+  async validateUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+    const { username, password } = authCredentialsDto;
+
+    // Password: encrypt, hash, salt
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // getUser(username) -> compare passwords
+    const found = await this.findOne(username);
+    if (!found) {
+      throw new NotFoundException(`Couldn't find username ${username}`);
+    }
+    try {
+      await bcrypt.compare(found.password, hashedPassword);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  //Tutorial:
 }

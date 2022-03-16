@@ -13,6 +13,11 @@ export class AuthController {
   }
 
   // Post signin
+  @Post("/signin")
+  SignIn(@Body() authCredentialsDto: AuthCredentialsDto): Promise<string> {
+    return this.authService.signIn(authCredentialsDto);
+  }
+
   // Post signout
   // Protected route
 }
